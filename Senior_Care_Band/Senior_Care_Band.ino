@@ -71,13 +71,20 @@ void setup() {
   sensorInitialization();
   connectToWiFi();
   configFB();
+  // Display ASCII Characters
+  // display.clearDisplay();
+  // display.setCursor(104, 15);
+  // display.setTextSize(2);
+  // display.write(3);
+  // display.display();
+  // delay(2000);
 }
 
 void loop() {
 
   unsigned long currentTime = millis();
   float temp = bmp.readTemperature();
-  float alt = bmp.readAltitude();
+  float alt = bmp.readAltitude(101500);
 
 
   //if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 500 || sendDataPrevMillis == 0)) {
@@ -113,7 +120,7 @@ void loop() {
 
 
   // Upload data to Firebase
-  if (Firebase.ready() && signupOK && (currentTime - sendDataPrevMillis > 500 || sendDataPrevMillis == 0)) {
+  if (Firebase.ready() && signupOK && (currentTime - sendDataPrevMillis > 1000 || sendDataPrevMillis == 0)) {
     uploadData(temp, alt, beatsPerMinute, beatAvg);
     displayData(temp, alt, beatsPerMinute, beatAvg);
     //getNotification();
@@ -271,23 +278,34 @@ void displayData(float temperature, float altitude, float heartRate, int AvgHear
   // lcd.print("Alt: ");
   // lcd.print(altitude);
   // lcd.print(" m");
+  //display.clearDisplay();
+  //display.setCursor(104, 15);
+  //display.setTextSize(2);
+  //display.write(3);
+  //display.display();
+  //delay(2000);
 
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(0,15);
-  display.print("Avg BPM: ");
-  display.println(AvgHeartRate);
-  display.setCursor(0,30);
+  display.setCursor(24, 0);
+  display.print("Senior Care ");
+  display.write(3);
+  display.setCursor(0, 15);
+  display.print("Average BPM: ");
+  display.print(AvgHeartRate);
+  display.print("  ");
+  display.write(3);
+  display.println();
+  display.setCursor(0, 30);
   display.print("Temperature: ");
   display.print(temperature);
   display.print(" *C");
-  display.setCursor(0,45);
+  display.setCursor(0, 45);
   display.print("Altitude: ");
   display.print(altitude);
   display.println(" m");
   display.display();
-
 }
 
 // void getNotification() {
